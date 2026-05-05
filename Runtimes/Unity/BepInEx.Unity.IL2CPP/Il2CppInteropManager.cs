@@ -308,7 +308,9 @@ internal static partial class Il2CppInteropManager
 
             AppDomain.CurrentDomain.AddCecilPlatformAssemblies(UnityBaseLibsDirectory);
             DownloadUnityAssemblies();
-            var cecilAssemblies = UseRuntimeAssemblies.Value ? RunIl2CppDumperWithRuntimeBinaries() : new AsmToCecilConverter(RunCpp2Il()).ConvertAll();
+            var asmResolverAssemblies = UseRuntimeAssemblies.Value 
+                ? RunIl2CppDumperWithRuntimeBinaries() 
+                : RunCpp2Il();
 
             if (DumpDummyAssemblies.Value)
             {
@@ -418,7 +420,7 @@ internal static partial class Il2CppInteropManager
         return assemblies;
     }
 
-    private static List<AssemblyDefinition> RunIl2CppDumperWithRuntimeBinaries()
+    private static List<AsmResolver.DotNet.AssemblyDefinition> RunIl2CppDumperWithRuntimeBinaries()
     {
         var metadataPath = Path.Combine(Paths.GameRootPath,
                         $"{Paths.ProcessName}_Data",
@@ -463,7 +465,7 @@ internal static partial class Il2CppInteropManager
         Logger.LogMessage("Running Il2CppDumper with runtime binaries to generate dummy assemblies");
 
         Il2CppDumper.ExtensionMethods.Init(il2cppBytes, metadataBytes, out var metadata, out var il2Cpp);
-        Il2CppDumper.ExtensionMethods.GenerateCecilAssemblies(metadata, il2Cpp, out var assemblies);
+        Il2CppDumper.ExtensionMethods.GenerateAssemblies(metadata, il2Cpp, out var assemblies);
 
         stopwatch.Stop();
         Logger.LogInfo($"Il2CppDumper finished in {stopwatch.Elapsed}");
@@ -471,7 +473,7 @@ internal static partial class Il2CppInteropManager
         return assemblies;
     }
 
-    private static void RunIl2CppInteropGenerator(List<AssemblyDefinition> sourceAssemblies)
+    private static void RunIl2CppInteropGenerator(List<AsmResolver.DotNet.AssemblyDefinition> sourceAssemblies)
     {
         var opts = new GeneratorOptions
         {

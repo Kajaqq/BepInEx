@@ -1,6 +1,6 @@
 [submodule "Il2CppInterop"]
 	path = Il2CppInterop
-	url = https://github.com/smominnt/Il2CppInterop.git
+	url = https://github.com/Kajaqq/Il2CppInterop.git
 [submodule "Il2CppDumper"]
 	path = Il2CppDumper
-	url = https://github.com/smominnt/Il2CppDumper.git
+	url = https://github.com/Kajaqq/Il2CppDumper

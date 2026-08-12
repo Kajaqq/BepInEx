@@ -477,7 +477,11 @@ internal static partial class Il2CppInteropManager
     {
         var opts = new GeneratorOptions
         {
-            GameAssemblyPath = ScanMethodRefs.Value ? GameAssemblyPath : null,
+            GameAssemblyPath = ScanMethodRefs.Value
+                                   ? GetGameAssemblyPathForXrefScanning(UseRuntimeAssemblies.Value,
+                                                                       GameAssemblyPath,
+                                                                       IL2CPPRuntimeBinariesPath)
+                                   : null,
             Source = sourceAssemblies,
             OutputDir = IL2CPPInteropAssemblyPath,
             UnityBaseLibsDir = Directory.Exists(UnityBaseLibsDirectory) ? UnityBaseLibsDirectory : null,
@@ -500,6 +504,15 @@ internal static partial class Il2CppInteropManager
                               .AddLogger(logger)
                               .AddInteropAssemblyGenerator()
                               .Run();
+    }
+
+    internal static string GetGameAssemblyPathForXrefScanning(bool useRuntimeAssemblies,
+                                                               string gameAssemblyPath,
+                                                               string runtimeBinariesPath)
+    {
+        return useRuntimeAssemblies
+                   ? Path.Combine(runtimeBinariesPath, "GameAssembly.dll")
+                   : gameAssemblyPath;
     }
 
     internal static void PreloadInteropAssemblies()

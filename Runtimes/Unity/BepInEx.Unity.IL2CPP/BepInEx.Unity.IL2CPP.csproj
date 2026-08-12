@@ -39,6 +39,9 @@
             <Private>False</Private>
         </Reference>
     </ItemGroup>
+    <ItemGroup>
+        <InternalsVisibleTo Include="BepInEx.Unity.IL2CPP.Tests" />
+    </ItemGroup>
 
     <!-- CopyLocalLockFileAssemblies causes to also output shared assemblies: https://github.com/NuGet/Home/issues/4837#issuecomment-354536302 -->
     <!-- Since all core assemblies usually follow naming of System.*, we just delete them for now -->
